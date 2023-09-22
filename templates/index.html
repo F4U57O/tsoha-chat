@@ -1,29 +1,24 @@
 <!DOCTYPE html>
-{% if session.username %}
-<p>Olet kirjautunut nimellä {{ session.username }}</p>
+Viestien määrä: {{ count }}
+<hr>
+{% for message in messages %}
+<i>Otsikko:</i> {{message[0]}}
+<i>Viesti:</i> {{ message[1] }}
+<p>
+<i>Lähettäjä:</i> {{ message[2] }}
+<p>
+<i>Aika:</i> {{ message[3].strftime("%Y-%m-%d %H:%M:%S") }}
+<hr>
+{% endfor %}
+{% if session.user_id %}
+Olet kirjautunut sisään.
 <form action="/result" method="GET">
 Hakusana: <input type="text" name="query">
 <br>
 <input type="submit" value="Lähetä">
 </form>
 <br>
-Viestien määrä: {{ count }}
-
-<hr>
-{% for message in messages %}
-<h2>{{ message.title }}</h2>
-<p>{{ message.content }} </p>
-<hr>
-{% endfor %}
-<a href="/new">Lähetä viesti</a>
-<a href="/logout">Kirjaudu ulos</a>
+<a href="/new">Lähetä viesti</a> | <a href="/logout">Kirjaudu ulos</a>
 {% else %}
-<form action="/login" method="POST">
-<p>Tunnus:<br>
-<input type="text" name="username"></p>
-<p>Salasana:<br>
-<input type="password" name="password"></p>
-<input type="submit" value="Kirjaudu">
-</form>
-Jos sinulla ei ole tunnusta, voit luoda uuden tunnuksen <a href="/register">tästä</a>
+<a href="/login">Kirjaudu sisään</a>
 {% endif %}
