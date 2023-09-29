@@ -64,4 +64,4 @@ def result():
         return "Haku on tyhjä"
 
     messages = result_query(query)
-    return render_template("index.html", messages=messages)
+    return render_template("index.html", messages=messages, count=len(messages))
