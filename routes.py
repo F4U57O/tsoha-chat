@@ -28,6 +28,8 @@ def login():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
+        if username == "" or password == "":
+            return "Käyttäjänimi ja/tai salasana on tyhjä"
         if users.login(username, password):
             return redirect("/")
         else:
@@ -46,6 +48,8 @@ def register():
         username = request.form["username"]
         password1 = request.form["password1"]
         password2 = request.form["password2"]
+        if username == "" or password == "":
+            return "Käyttäjänimi ja/tai salasana on tyhjä"
         if password1 != password2:
             return render_template("error.html", message="Salasanat eroavat")
         if users.register(username, password1):
