@@ -19,6 +19,18 @@ Hakusana: <input type="text" name="query">
 </form>
 <br>
 <a href="/new">Lähetä viesti</a> | <a href="/logout">Kirjaudu ulos</a>
+<html>
+<head>
+<title>Edellinen alue</title>
+</head>
+<button onclick="goBack()">Takaisin</button>
+<script>
+function goBack() {
+window.history.back();
+}
+</script>
+</body>
+</html>
 {% else %}
 <a href="/login">Kirjaudu sisään</a>
 {% endif %}
