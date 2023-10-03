@@ -1,9 +1,23 @@
 <!DOCTYPE html>
-<form action="/send" method="POST">
-Otsikko: <input type="text" name="title"> <br>
+<form action="/send" method="POST" onsubmit="return check(this)">
+Otsikko: <input type="text" name="title"> <br> max. 20 merkkiä
 Viesti: <br>
 <textarea name="content" rows="5" cols="40">
-</textarea> <br>
+</textarea> <br> max. 200 merkkiä
 <input type="submit" value="Lähetä">
 <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
 </form>
+
+<script>
+function check(form) {
+    if (form.title.value.length > 20) {
+        alert("Otsikko on liian pitkä");
+        return false;
+    }
+    if (form.message.value.length > 200) {
+        alert("Viesti on liian pitkä");
+        return false;
+    }
+    return true;
+}
+</script>
