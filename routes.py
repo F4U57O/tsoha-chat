@@ -2,6 +2,8 @@ from app import app
 from flask import render_template, request, redirect
 import messages, users
 from messages import result_query
+from db import db
+from sqlalchemy.sql import text
 
 @app.route("/")
 def index():
@@ -65,3 +67,42 @@ def result():
 
     messages = result_query(query)
     return render_template("index.html", messages=messages, count=len(messages))
+
+@app.route("/areas")
+def areas():
+    sql = text("SELECT * FROM areas")
+    result = db.session.execute(sql)
+    areas = result.fetchall()
+    return render_template("areas.html", areas=areas)
+
+@app.route("/threads/<int:area_id>")
+def threads(area_id):
+    sql = text("SELECT * FROM threads WHERE area_id = :area_id")
+    result = db.session.execute(sql, {"area_id": area_id})
+    threads = result.fetchall()
+    return render_template("threads.html", threads=threads)
+
+@app.route("/create_area")
+def create_area():
+    return render_template("create_area.html")
+
+@app.route("/create_area", methods=["POST"])
+def save_area():
+    name = request.form["name"]
+    sql = text("INSERT INTO areas (name) VALUES (:name)")
+    db.session.execute(sql, {"name": name})
+    db.session.commit()
+    return redirect("/areas")
+
+@app.route("/create_thread/<int:area_id>")
+def create_thread(area_id):
+    return render_template("create_thread.html", area_id=area_id)
+
+@app.route("/create_thread/<int:area_id>", methods=["POST"])
+def save_thread(area_id):
+    title = request.form["title"]
+    content = request.form["content"]
+    sql = text("INSERT INTO threads (title, content, area_id, sent_at) VALUES (:title, :content, :area_id, NOW())")
+    db.session.execute(sql, {"title": title, "content": content, "area_id": area_id})
+    db.session.commit()
+    return redirect("/threads/{}".format(area_id))
