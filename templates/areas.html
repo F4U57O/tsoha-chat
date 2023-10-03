@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Keskustelualueet</title>
+</head>
+<body>
+  <h1>Keskustelualueet</h1>
+
+  <ul>
+    {% for area in areas %}
+      <li><a href="/threads/{{ area.id }}"> {{ area.name }}</a></li>
+    {% endfor %}
+  </ul>
+  <a href="/create_area">Luo uusi keskustelualue</a>
+</body>
+</html>
