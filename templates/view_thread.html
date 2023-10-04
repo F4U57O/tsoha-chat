@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Ketju: {{ thread.title }}</title>
+</head>
+<body>
+  <h1>Ketju: {{ thread.title }}</h1>
+
+  <ul>
+    {% for message in messages %}
+    <li>
+      <strong>{{ message.username }}</strong> ({{ message.sent_at.strftime("%Y-%m-%d %H:%M:%S") }}):
+      <p>{{ message.content }}</p>
+    </li>
+    {% endfor %}
+  </ul>
+
+  <h2>Lisää uusi viesti</h2>
+  <form action="/create_message/{{ thread.id }}" method="POST">
+    <label for="content">Viesti:</label>
+    <textarea id="content" name="content" rows="5" cols="40" required></textarea>
+    <br>
+    <input type="submit" value="Lähetä viesti">
+  </form>
+  <br>
+  <a href="/threads/{{ thread.area_id }}">Takaisin ketjuun</a>
+</body>
+</html>
