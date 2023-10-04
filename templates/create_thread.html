@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Luo uusi ketju</title>
+</head>
+<body>
+  <h1>Luo uusi ketju</h1>
+  <form action="/create_thread/{{ area_id }}" method="POST">
+    <label for="title">Otsikko:</label>
+    <input type="text" id="title" name="title" required>
+    <br>
+    <label for="content">Sisältö:</label>
+    <textarea id="content" name="content" rows="5" cols="40" required></textarea>
+    <br>
+    <input type="submit" value="Luo ketju">
+  </form>
+  <br>
+  <a href="/threads/{{ area_id }}">Takaisin ketjuihin</a>
+</body>
+</html>
