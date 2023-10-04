@@ -14,6 +14,7 @@ CREATE TABLE messages (
 CREATE TABLE threads (
     id SERIAL PRIMARY KEY,
     title TEXT,
+    content TEXT,
     area_id INTEGER REFERENCES areas(id),
     sent_at TIMESTAMP
 );
