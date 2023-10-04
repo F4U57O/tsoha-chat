@@ -80,7 +80,7 @@ def threads(area_id):
     sql = text("SELECT * FROM threads WHERE area_id = :area_id")
     result = db.session.execute(sql, {"area_id": area_id})
     threads = result.fetchall()
-    return render_template("threads.html", threads=threads)
+    return render_template("threads.html", area_id=area_id, threads=threads)
 
 @app.route("/create_area")
 def create_area():
@@ -106,3 +106,25 @@ def save_thread(area_id):
     db.session.execute(sql, {"title": title, "content": content, "area_id": area_id})
     db.session.commit()
     return redirect("/threads/{}".format(area_id))
+
+@app.route("/view_thread/<int:thread_id>")
+def view_thread(thread_id):
+    sql = text("SELECT * FROM threads WHERE id = :thread_id")
+    sql2 = text("SELECT * FROM messages WHERE thread_id = :thread_id ORDER BY sent_at")
+    result = db.session.execute(sql, {"thread_id": thread_id})
+    result2 = db.session.execute(sql2, {"thread_id": thread_id})
+    thread = result.fetchone()
+    messages = result2.fetchall()
+    return render_template("view_thread.html", thread=thread, messages=messages)
+
+@app.route("/create_message/<int:thread_id>", methods=["POST"])
+def create_message(thread_id):
+    content = request.form["content"]
+    user_id = users.user_id()
+    if user_id == 0:
+        return "Käyttäjän on oltava kirjatunut lisätäkseen viestin."
+
+    sql = text("INSERT INTO messages (content, user_id, thread_id, sent_at) VALUES (:content, :user_id, :thread_id, NOW())")
+    db.session.execute(sql, {"content": content, "user_id": user_id, "thread_id": thread_id})
+    db.session.commit()
+    return redirect("/view_thread/{}".format(thread_id))
