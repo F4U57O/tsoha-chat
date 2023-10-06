@@ -102,6 +102,12 @@ def threads(area_id):
 
 @app.route("/create_area")
 def create_area():
+    if "user_id" not in session:
+        return render_template("error.html", message="Sinun on kirjauduttava sisään päästäksesi tälle sivulle.")
+    user_id = session["user_id"]
+    user_role = users.get_user_role(user_id)
+    if user_role != "admin":
+        return render_template("error.html", message="Sinulla ei ole tarvittavia oikeuksia tälle sivustolle")
     return render_template("create_area.html")
 
 @app.route("/create_area", methods=["POST"])
