@@ -19,8 +19,11 @@
   </ul>
 </body>
 </html>
+{% if session["user_role"] == "admin" %}
+<a href="/create_area">Luo uusi keskustelualue</a>
+{% endif %}
 {% if session.user_id %}
-Olet kirjautunut sisään.
+  Olet kirjautunut sisään {% if session["user_role"] == "admin" %} (Admin){% endif %}.
 <form action="/result" method="GET">
 Hakusana: <input type="text" name="query">
 <br>
