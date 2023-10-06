@@ -14,7 +14,7 @@
     </li>
     {% endfor %}
   </ul>
-
+{% if session.user_id %}
   <h2>Lisää uusi viesti</h2>
   <form action="/create_message/{{ thread.id }}" method="POST">
     <label for="content">Viesti:</label>
@@ -26,3 +26,13 @@
   <a href="/threads/{{ thread.area_id }}">Takaisin ketjuun</a>
 </body>
 </html>
+{% else %}
+<form action="/login" method="post">
+Tunnus: <input type="text" name="username">
+<p>
+Salasana: <input type="password" name="password">
+<p>
+<input type="submit" value="Kirjaudu">
+</form>
+Jos sinulla ei ole tunnusta, voit luoda uuden tunnuksen <a href="/register">tästä</a>
+{% endif %}
