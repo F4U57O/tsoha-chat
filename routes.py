@@ -7,12 +7,26 @@ from sqlalchemy.sql import text
 
 @app.route("/")
 def index():
-    list = messages.get_list()
-    return render_template("index.html", count=len(list), messages=list)
+    sql = text("SELECT id, name FROM areas")
+    result = db.session.execute(sql)
+    areas = result.fetchall()
+
+    threads_for_areas = {}
+    for area in areas:
+        area_id = area.id
+        sql_threads = text("""SELECT id, title FROM threads WHERE area_id = :area_id""")
+        result_threads = db.session.execute(sql_threads, {"area_id": area_id})
+        threads = result_threads.fetchall()
+        threads_for_areas[area_id] = threads
+
+    return render_template("index.html", areas=areas, threads_for_areas=threads_for_areas)
 
 @app.route("/new")
 def new():
-    return render_template("new.html")
+    sql = text("SELECT * FROM areas")
+    result = db.session.execute(sql)
+    areas = result.fetchall()
+    return render_template("new.html", areas=areas)
 
 @app.route("/send", methods=["POST"])
 def send():
@@ -96,6 +110,9 @@ def save_area():
 
 @app.route("/create_thread/<int:area_id>")
 def create_thread(area_id):
+    sql = text("UPDATE areas SET thread_count = thread_count + 1 WHERE id = :area_id")
+    db.session.execute(sql, {"area_id": area_id})
+    db.session.commit()
     return render_template("create_thread.html", area_id=area_id)
 
 @app.route("/create_thread/<int:area_id>", methods=["POST"])
@@ -125,6 +142,8 @@ def create_message(thread_id):
         return "Käyttäjän on oltava kirjatunut lisätäkseen viestin."
 
     sql = text("INSERT INTO messages (content, user_id, thread_id, sent_at) VALUES (:content, :user_id, :thread_id, NOW())")
+    sql2 = text("UPDATE areas SET message_count = message_count + 1, last_message_time = NOW() WHERE id = :thread_id")
     db.session.execute(sql, {"content": content, "user_id": user_id, "thread_id": thread_id})
+    db.session.execute(sql2, {"thread_id": thread_id})
     db.session.commit()
     return redirect("/view_thread/{}".format(thread_id))
