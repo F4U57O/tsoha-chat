@@ -4,6 +4,7 @@ import messages, users
 from messages import result_query
 from db import db
 from sqlalchemy.sql import text
+from flask import session
 
 @app.route("/")
 def index():
@@ -47,6 +48,8 @@ def login():
         if username == "" or password == "":
             return "Käyttäjänimi ja/tai salasana on tyhjä"
         if users.login(username, password):
+            session["user_id"] = users.user_id()
+            session["user_role"] = users.get_user_role(session["user_id"])
             return redirect("/")
         else:
             return render_template("error.html", message="Väärä tunnus tai salasana")
@@ -64,11 +67,12 @@ def register():
         username = request.form["username"]
         password1 = request.form["password1"]
         password2 = request.form["password2"]
-        if username == "" or password == "":
+        role = request.form["role"]
+        if username == "" or password1 == "":
             return "Käyttäjänimi ja/tai salasana on tyhjä"
         if password1 != password2:
             return render_template("error.html", message="Salasanat eroavat")
-        if users.register(username, password1):
+        if users.register(username, password1, role):
             return redirect("/")
         else:
             return render_template("error.html", message="Rekisteröinti ei onnistunut")
@@ -127,7 +131,7 @@ def save_thread(area_id):
 @app.route("/view_thread/<int:thread_id>")
 def view_thread(thread_id):
     sql = text("SELECT * FROM threads WHERE id = :thread_id")
-    sql2 = text("SELECT * FROM messages WHERE thread_id = :thread_id ORDER BY sent_at")
+    sql2 = text("""SELECT M.content, U.username, M.sent_at FROM messages M INNER JOIN users U ON M.user_id = U.id WHERE M.thread_id = :thread_id ORDER BY sent_at""")
     result = db.session.execute(sql, {"thread_id": thread_id})
     result2 = db.session.execute(sql2, {"thread_id": thread_id})
     thread = result.fetchone()
