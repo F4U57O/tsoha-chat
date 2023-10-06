@@ -1,15 +1,24 @@
 <!DOCTYPE html>
-Viestien määrä: {{ count }}
-<hr>
-{% for message in messages %}
-<i>Otsikko:</i> {{message[0]}}
-<i>Viesti:</i> {{ message[1] }}
-<p>
-<i>Lähettäjä:</i> {{ message[2] }}
-<p>
-<i>Aika:</i> {{ message[3].strftime("%Y-%m-%d %H:%M:%S") }}
-<hr>
-{% endfor %}
+<html>
+<head>
+  <title>Etusivu</title>
+</head>
+<body>
+  <h1>Keskustelualueet</h1>
+  <ul>
+    {% for area in areas %}
+      <li>
+        <h2><a href="/threads/{{ area.id }}">{{ area.name }}</a></h2>
+        <ul>
+          {% for thread in threads_for_areas[area.id] %}
+            <li><a href="/view_thread/{{ thread.id}}">{{ thread.title }}</a></li>
+          {% endfor %}
+        </ul>
+      </li>
+    {% endfor %}
+  </ul>
+</body>
+</html>
 {% if session.user_id %}
 Olet kirjautunut sisään.
 <form action="/result" method="GET">
