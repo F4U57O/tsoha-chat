@@ -21,3 +21,15 @@ def result_query(query):
     result = db.session.execute(sql, {"query": "%" +query + "%"})
     messages = result.fetchall()
     return messages
+
+def get_threads():
+    sql = text("SELECT * FROM threads")
+    result = db.session.execute(sql)
+    threads = result.fetchall()
+    return threads
+
+def get_latest():
+    sql = text("SELECT * FROM messages WHERE sent_at = (SELECT MAX(sent_at) FROM messages)")
+    result = db.session.execute(sql)
+    latest_message = result.fetchone()
+    return latest_message
