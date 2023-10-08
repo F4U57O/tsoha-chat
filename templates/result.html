@@ -15,7 +15,7 @@
   <ul>
     {% for result in results %}
       <li>
-        <strong>{{ result.title }}</strong> (Käyttäjä: {{ result.username }}) - {{ result.sent_at.strftime("%Y-%m-%d %H:%M:%S") }}
+        (Käyttäjä: {{ result.username }}) - {{ result.sent_at.strftime("%Y-%m-%d %H:%M:%S") }}
         <p>{{ result.content }}</p>
       </li>
       {% endfor %}
