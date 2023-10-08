@@ -1,10 +1,14 @@
 <!DOCTYPE html>
+{% extends "layout.html" %}
+
+{% block title %} Etusivu {% endblock %}
+{% block content %}
 <html>
 <head>
   <title>Etusivu</title>
 </head>
 <body>
-  <h1>Keskustelualueet</h1>
+  <h1><a href="/areas">Keskustelualueet</a></h1>
   <ul>
     {% for area in areas %}
       <li>
@@ -19,30 +23,5 @@
   </ul>
 </body>
 </html>
-{% if session["user_role"] == "admin" %}
-<a href="/create_area">Luo uusi keskustelualue</a>
-{% endif %}
-{% if session.user_id %}
-  Olet kirjautunut sisään {% if session["user_role"] == "admin" %} (Admin){% endif %}.
-<form action="/result" method="GET">
-Hakusana: <input type="text" name="query">
-<br>
-<input type="submit" value="Lähetä">
-</form>
-<br>
-<a href="/new">Lähetä viesti</a> | <a href="/logout">Kirjaudu ulos</a>
-<html>
-<head>
-<title>Edellinen alue</title>
-</head>
-<button onclick="goBack()">Takaisin</button>
-<script>
-function goBack() {
-window.history.back();
-}
-</script>
-</body>
-</html>
-{% else %}
-<a href="/login">Kirjaudu sisään</a>
-{% endif %}
+
+{% endblock %}
