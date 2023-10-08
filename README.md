@@ -1,28 +1,29 @@
 # tsoha-chat
 Keskustelusovellus
 
+Kun käynnistät sovelluksen ensimmäisen kerran, keskustelualueet ovat tyhjiä. Rekisteröidy painamalla "Kirjaudu sisään" linkkiä
+ja "tästä" linkkiä painamalla pääset rekisteröitymään. Valitse rooliksi ylläpitäjä, jotta pääset luomaan ja poistamaan keskustelualueita.
+Keskustelualueita voit poistaa klikkaamalla "Keskustelualueet" linkkiä. (Ylläpitäjänä)
+Tämän jälkeen voit luoda keskusteluketjuja ylläpitäjänä tai käyttäjänä. Käyttäjä voi muokata tai poistaa omia viestejään.
+Ketjuissa näkyy kyseisen ketjun viestien määrä.
+Hakukentästä voi etsiä viestejä niiden sisällön perusteella ja tuloksena näkyy kaikki viestit, lähettäjä, ajankohta ja viestien määrä.
+
+Tarkoituksena olisi vielä:
+Muokata sovelluksen ulkoasua, parantaa tietoturvaa ja rajoituksia. Etusivulle ketjujen viimeisimpiä viestien tietoja.
+Koodin rakennetta parannella. Poistaa turhia osia koodista.
+
 
 Sovelluksen nykyinen tilanne:
 
-  * Käyttäjä voi kirjautua sisään ja ulos sekä luoda uuden tunnuksen.
-  * Rekisteröinnin aikana käyttäjä voi valita roolin: käyttäjä tai ylläpitäjä. (valinnalla ei ole vielä toiminnallisuutta)
-  * Käyttäjä näkee sovelluksen etusivulla listan lähetetyistä viesteistä ja lähetetyn viestin ajankohdan.
-  * Käyttäjä voi luoda viestin, jolla on otsikko.
-  * Käyttäjä voi etsiä kaikki viestit, joiden osana on annettu sana.
-
-
-Lopullisessa sovelluksessa näkyy keskustelualueita, joista jokaisella on tietty aihe. Alueilla on keskusteluketjuja, jotka muodostuvat viesteistä. Jokainen käyttäjä on peruskäyttäjä tai ylläpitäjä.
-
-Sovelluksen ominaisuuksia:
-
-  * Käyttäjä voi kirjautua sisään ja ulos sekä luoda uuden tunnuksen.
-  * Käyttäjä näkee sovelluksen etusivulla listan alueista sekä jokaisen alueen ketjujen ja viestien määrän ja viimeksi lähetetyn viestin ajankohdan.
-  * Käyttäjä voi luoda alueelle uuden ketjun antamalla ketjun otsikon ja aloitusviestin sisällön.
+  * Käyttäjä voi kirjautua sisään ja ulos sekä luoda uuden tunnuksen. Rooliksi voi valita käyttäjä tai ylläpitäjä.
+  * Käyttäjä näkee sovelluksen etusivulla listan alueista sekä listan ketjuista, joissa linkki kyseisiin alueisiin ja ketjuihin.   
+  * Käyttäjä voi luoda alueelle uuden ketjun antamalla ketjun otsikon.
   * Käyttäjä voi kirjoittaa uuden viestin olemassa olevaan ketjuun.
-  * Käyttäjä voi muokata luomansa ketjun otsikkoa sekä lähettämänsä viestin sisältöä. Käyttäjä voi myös poistaa ketjun tai viestin.
+  * Käyttäjä voi muokata lähettämänsä viestin sisältöä. Käyttäjä voi myös poistaa viestin.
   * Käyttäjä voi etsiä kaikki viestit, joiden osana on annettu sana.
   * Ylläpitäjä voi lisätä ja poistaa keskustelualueita.
-  * Ylläpitäjä voi luoda salaisen alueen ja määrittää, keillä käyttäjillä on pääsy alueelle.
+
+
 
 Ohjeet sovelluksen käynnistykseen:
 
