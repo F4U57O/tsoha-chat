@@ -1,4 +1,8 @@
 <!DOCTYPE html>
+{% extends "layout.html" %}
+
+{% block title %} Etusivu {% endblock %}
+{% block content %}
 <html>
 <head>
   <title>Keskustelualueet</title>
@@ -8,11 +12,16 @@
 
   <ul>
     {% for area in areas %}
-      <li><a href="/threads/{{ area.id }}"> {{ area.name }}</a></li>
+      <li><a href="/threads/{{ area.id }}"> {{ area.name }}</a>
+      {% if session["user_role"] == "admin" %}
+      <a href="/delete_area/{{ area.id }}" onclick="return confirm('Haluatko varmasti poistaa tämän alueen?')">Poista</a>
+      {% endif %}</li>
     {% endfor %}
   </ul>
   {% if session["user_role"] == "admin" %}
   <a href="/create_area">Luo uusi keskustelualue</a>
   {% endif %}
+
 </body>
 </html>
+{% endblock %}
