@@ -1,16 +1,24 @@
 <!DOCTYPE html>
+{% extends "layout.html" %}
+
+{% block title %} Etusivu {% endblock %}
+{% block content %}
 <html>
 <head>
   <title>Ketju: {{ thread.title }}</title>
 </head>
 <body>
   <h1>Ketju: {{ thread.title }}</h1>
-
+  <p> Viestejä: {{ count }} </p>
   <ul>
     {% for message in messages %}
     <li>
       <strong>{{ message.username }}</strong> ({{ message.sent_at.strftime("%Y-%m-%d %H:%M:%S") }}):
       <p>{{ message.content }}</p>
+      {% if message.user_id == session["user_id"] %}
+      <a href="/edit_message/{{ message.id }}">Muokkaa</a>
+      <a href="/delete/{{ message.id }}">Poista</a>
+      {% endif %}
     </li>
     {% endfor %}
   </ul>
@@ -36,3 +44,4 @@ Salasana: <input type="password" name="password">
 </form>
 Jos sinulla ei ole tunnusta, voit luoda uuden tunnuksen <a href="/register">tästä</a>
 {% endif %}
+{% endblock %}
