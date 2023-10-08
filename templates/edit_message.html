@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+{% extends "layout.html" %}
+
+{% block title %} Etusivu {% endblock %}
+{% block content %}
+<body>
+<h2>Muokkaa viesti</h2>
+<form action="/edit_message/{{ message.id }}" method="POST">
+  <input type="hidden" name="thread_id" value="{{ message.thread_id }}"
+  <label for="content">Uusi sisältö:</label>
+  <textarea id="content" name="content" rows="5" cols="40" required>{{ message.content }}</textarea>
+  <br>
+  <input type="submit" value="Tallenna muutokset">
+</form>
+<br>
+<a href="/view_thread/{{ message.thread_id }}">Palaa takaisin</a>
+</body>
+{% endblock %}
