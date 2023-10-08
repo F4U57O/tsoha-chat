@@ -1,6 +1,25 @@
 <!DOCTYPE html>
-<form action="/result" method="GET">
-Hakusana: <input type="text" name="query">
-<br>
-<input type="submit" value="Lähetä">
-</form>
+{% extends "layout.html" %}
+
+{% block title %} Etusivu {% endblock %}
+{% block content %}
+<html>
+<head>
+  <title>Hakutulokset</title>
+</head>
+<body>
+  <h1>Hakutulokset</h1>
+
+  <p>Hakutulos haulle: {{ query }}</p>
+  <p> Viestejä: {{ count }} </p>
+  <ul>
+    {% for result in results %}
+      <li>
+        <strong>{{ result.title }}</strong> (Käyttäjä: {{ result.username }}) - {{ result.sent_at.strftime("%Y-%m-%d %H:%M:%S") }}
+        <p>{{ result.content }}</p>
+      </li>
+      {% endfor %}
+    </ul>
+</body>
+</html>
+{% endblock %}
