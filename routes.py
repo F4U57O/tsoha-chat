@@ -1,5 +1,5 @@
 from app import app
-from flask import render_template, request, redirect
+from flask import render_template, request, redirect, flash, url_for
 import messages, users
 from messages import result_query
 from db import db
@@ -84,7 +84,7 @@ def result():
         return "Haku on tyhjä"
 
     messages = result_query(query)
-    return render_template("index.html", messages=messages, count=len(messages))
+    return render_template("result.html", query=query, results=messages, count=len(messages))
 
 @app.route("/areas")
 def areas():
@@ -128,21 +128,36 @@ def create_thread(area_id):
 @app.route("/create_thread/<int:area_id>", methods=["POST"])
 def save_thread(area_id):
     title = request.form["title"]
-    content = request.form["content"]
-    sql = text("INSERT INTO threads (title, content, area_id, sent_at) VALUES (:title, :content, :area_id, NOW())")
-    db.session.execute(sql, {"title": title, "content": content, "area_id": area_id})
+    sql = text("INSERT INTO threads (title, area_id, sent_at) VALUES (:title, :area_id, NOW())")
+    db.session.execute(sql, {"title": title, "area_id": area_id})
     db.session.commit()
     return redirect("/threads/{}".format(area_id))
 
 @app.route("/view_thread/<int:thread_id>")
 def view_thread(thread_id):
     sql = text("SELECT * FROM threads WHERE id = :thread_id")
-    sql2 = text("""SELECT M.content, U.username, M.sent_at FROM messages M INNER JOIN users U ON M.user_id = U.id WHERE M.thread_id = :thread_id ORDER BY sent_at""")
+    sql2 = text("""SELECT M.id, M.content, M.user_id, U.username, M.sent_at FROM messages M INNER JOIN users U ON M.user_id = U.id WHERE M.thread_id = :thread_id ORDER BY sent_at""")
     result = db.session.execute(sql, {"thread_id": thread_id})
     result2 = db.session.execute(sql2, {"thread_id": thread_id})
     thread = result.fetchone()
     messages = result2.fetchall()
-    return render_template("view_thread.html", thread=thread, messages=messages)
+    return render_template("view_thread.html", thread=thread, messages=messages, count=len(messages))
+
+@app.route("/delete/<int:message_id>", methods=["GET", "POST"])
+def delete_message(message_id):
+    sql_check = text("SELECT thread_id FROM messages WHERE id = :message_id")
+    result_check = db.session.execute(sql_check, {"message_id": message_id})
+    thread_id = result_check.scalar()
+    if thread_id is not None:
+        sql = text("DELETE FROM messages WHERE id=:message_id")
+        db.session.execute(sql, {"message_id": message_id})
+        db.session.commit()
+        flash("Viesti poistettu")
+    else:
+        return render_template("error.html", message="Viestiä ei löytynyt")
+    return redirect(request.referrer)
+
+
 
 @app.route("/create_message/<int:thread_id>", methods=["POST"])
 def create_message(thread_id):
@@ -152,8 +167,41 @@ def create_message(thread_id):
         return "Käyttäjän on oltava kirjatunut lisätäkseen viestin."
 
     sql = text("INSERT INTO messages (content, user_id, thread_id, sent_at) VALUES (:content, :user_id, :thread_id, NOW())")
-    sql2 = text("UPDATE areas SET message_count = message_count + 1, last_message_time = NOW() WHERE id = :thread_id")
     db.session.execute(sql, {"content": content, "user_id": user_id, "thread_id": thread_id})
-    db.session.execute(sql2, {"thread_id": thread_id})
     db.session.commit()
     return redirect("/view_thread/{}".format(thread_id))
+
+@app.route("/edit_message/<int:message_id>", methods=["GET", "POST"])
+def edit_message(message_id):
+    if request.method == "GET":
+        sql = text("SELECT * FROM messages WHERE id = :message_id")
+        result = db.session.execute(sql, {"message_id": message_id})
+        message = result.fetchone()
+        if message:
+            return render_template("edit_message.html", message=message)
+        else:
+            return render_template("error.html", error_message="Viestiä ei löytynyt")
+
+    if request.method == "POST":
+        new_content = request.form.get("content")
+        thread_id = request.form.get("thread_id")
+        sql_new = text("UPDATE messages SET content = :new_content WHERE id = :message_id")
+        db.session.execute(sql_new, {"new_content": new_content, "message_id": message_id})
+        db.session.commit()
+        return redirect("/view_thread/{}".format(thread_id))
+
+@app.route("/delete_area/<int:area_id>", methods=["POST", "GET"])
+def delete_area(area_id):
+    user_id = session["user_id"]
+    user_role = users.get_user_role(user_id)
+    if user_role != "admin":
+        return render_template("error.html", message="Sinulla ei ole tarvittavia oikeuksia tälle sivustolle")
+    else:
+        sql = text("""DELETE FROM messages WHERE thread_id IN (SELECT id FROM threads WHERE area_id = :area_id)""")
+        db.session.execute(sql, {"area_id": area_id})
+        sql = text("DELETE FROM threads WHERE area_id = :area_id")
+        db.session.execute(sql, {"area_id": area_id})
+        sql = text("DELETE FROM areas WHERE id = :area_id")
+        db.session.execute(sql, {"area_id": area_id})
+        db.session.commit()
+        return redirect("/")
