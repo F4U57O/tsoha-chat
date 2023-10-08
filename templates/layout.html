@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>{% block title %}TSOHA-CHAT{% endblock %}</title>
+  </head>
+  <body>
+    <nav>
+      {% if session.user_id %}
+        Olet kirjautunut sisään {% if session["user_role"] == "admin" %} (Admin){% endif %}
+      <a href="/logout">Kirjaudu ulos</a>
+      {% else %}
+      <a href="/login">Kirjaudu sisään</a>
+      {% endif %}
+      <ul>
+        <li><a href="/">Etusivulle</a></li>
+        <li><a href="/areas">Keskustelualueet</a>
+        <li><a href="javascript:history.back()">Takaisin</a></li>
+        {% if session["user_role"] == "admin" %}
+        <a href="/create_area">Luo uusi keskustelualue</a>
+        {% endif %}
+      </ul>
+      <form action="/result" method="GET">
+        <input type="text" name="query" placeholder="Hae viestejä">
+        <input type="submit" value="Hae">
+      </form>
+    </nav>
+    <div class="content">
+      {% block content %}{% endblock %}
+    </div>
+  </body>
+  </html>
