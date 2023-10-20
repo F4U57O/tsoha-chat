@@ -1,0 +1,17 @@
+body {
+  font-family: Arial, sans-serif;
+}
+
+h1 {
+  color: #333;
+}
+
+.button {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 20px
+}
+.text-with-stroke {
+  -webkit-text-stroke: 2px black;
+  text-stroke: 2px black;
+  color: #0d6efd;
