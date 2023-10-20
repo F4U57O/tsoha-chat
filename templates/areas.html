@@ -12,9 +12,10 @@
 
   <ul>
     {% for area in areas %}
-      <li><a href="/threads/{{ area.id }}"> {{ area.name }}</a>
+      <li class="mb-2"><a href="/threads/{{ area.id }}"> {{ area.name }}</a>
       {% if session["user_role"] == "admin" %}
-      <a href="/delete_area/{{ area.id }}" onclick="return confirm('Haluatko varmasti poistaa tämän alueen?')">Poista</a>
+      <a href="/delete_area/{{ area.id }}" class="btn btn-sm btn-primary" onclick="return confirm('Haluatko varmasti poistaa tämän alueen?')">Poista</a>
+      <br>
       {% endif %}</li>
     {% endfor %}
   </ul>
