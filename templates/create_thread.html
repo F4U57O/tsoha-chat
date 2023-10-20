@@ -11,7 +11,7 @@
   <h1>Luo uusi ketju</h1>
   <form action="/create_thread/{{ area_id }}" method="POST">
     <label for="title">Otsikko:</label>
-    <input type="text" id="title" name="title" required>
+    <input type="text" id="title" name="title" required maxlength="40">
     <br>
     <input type="submit" value="Luo ketju">
   </form>
