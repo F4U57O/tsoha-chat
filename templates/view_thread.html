@@ -36,6 +36,7 @@
 {% else %}
 <h2 class="mb-2">Kirjaudu sisään</h2>
   <form action="/login" method="post">
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     <div class="form-group mb-2">
       <label for="username">Tunnus</label>
       <div class="col-md-4">
