@@ -12,14 +12,16 @@
   <p> Viestejä: {{ count }} </p>
   <ul>
     {% for message in messages %}
-    <li>
+
+      <img src="/static/zohachat-icon.svg" alt="Icon" class="medium-icon">
       <strong>{{ message.username }}</strong> ({{ message.sent_at.strftime("%Y-%m-%d %H:%M:%S") }}):
       <p>{{ message.content }}</p>
       {% if message.user_id == session["user_id"] %}
       <a href="/edit_message/{{ message.id }}">Muokkaa</a>
       <a href="/delete/{{ message.id }}">Poista</a>
+      <br>
       {% endif %}
-    </li>
+
     {% endfor %}
   </ul>
 {% if session.user_id %}
