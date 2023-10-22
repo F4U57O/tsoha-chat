@@ -5,6 +5,8 @@ from messages import result_query
 from db import db
 from sqlalchemy.sql import text
 from flask import session
+import secrets
+
 
 @app.route("/")
 def index():
@@ -41,8 +43,12 @@ def send():
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "GET":
+        session["csrf_token"] = secrets.token_hex(16)
         return render_template("login.html")
     if request.method == "POST":
+        csrf_token = request.form.get("csrf_token")
+        if csrf_token != session.get("csrf_token"):
+            return "CSRF-tunnus ei täsmää, Pyyntö estetty."
         username = request.form["username"]
         password = request.form["password"]
         if username == "" or password == "":
@@ -62,8 +68,12 @@ def logout():
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "GET":
+        session["csrf_token"] = secrets.token_hex(16)
         return render_template("register.html")
     if request.method == "POST":
+        csrf_token = request.form.get("csrf_token")
+        if csrf_token != session.get("csrf_token"):
+            return "CSRF-tunnus ei täsmää, Pyyntö estetty."
         username = request.form["username"]
         password1 = request.form["password1"]
         password2 = request.form["password2"]
