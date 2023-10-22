@@ -13,6 +13,10 @@
         <div class="col-md-6">
     <nav>
       <img src="/static/zohachat.svg" alt="Logo">
+      <form action="/result" method="GET">
+        <input type="text" name="query" placeholder="Hae viestejä">
+        <input type="submit" value="Hae" class="btn btn-primary">
+      </form>
       {% if session.user_id %}
         Olet kirjautunut sisään {% if session["user_role"] == "admin" %} (Admin){% endif %}
       <a href="/logout">Kirjaudu ulos</a>
@@ -20,19 +24,17 @@
       <a href="/login">Kirjaudu sisään</a>
       {% endif %}
       <br>
-        <a href="/">Etusivulle</a> |
-        <a href="/areas">Keskustelualueet</a> |
-        <a href="javascript:history.back()">Takaisin</a> |
-        <a href="/feedback">Anna palautetta</a> |
+        <a href="/" class="btn btn-primary">Etusivulle</a>
+        <a href="/areas" class="btn btn-primary">Keskustelualueet</a>
+        <a href="javascript:history.back()" class="btn btn-primary">Takaisin</a>
+        <a href="/feedback" class="btn btn-primary">Anna palautetta</a>
         {% if session["user_role"] == "admin" %}
         <p>
-        | <a href="/create_area">Luo uusi keskustelualue</a> |
+          <br>
+        <a href="/create_area">Luo uusi keskustelualue</a>
         {% endif %}
-      <form action="/result" method="GET">
-        <input type="text" name="query" placeholder="Hae viestejä">
-        <input type="submit" value="Hae">
-      </form>
-      <br>
+        <br>
+        <br>
       <br>
     </nav>
     <div class="content">
