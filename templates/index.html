@@ -8,17 +8,18 @@
   <title>Etusivu</title>
 </head>
 <body>
-  <h1><p class="text-with-stroke"<b><a href="/areas">Keskustelualueet</a></b></p></h1>
+  <h1><p class="text-with-stroke"<b><img src="/static/zohachat-icon.svg" alt="Icon" class="medium-icon"><a href="/areas">Keskustelualueet</a></b></p></h1>
   <ul>
     {% for area in areas %}
-      <li>
-        <h2><a href="/threads/{{ area.id }}">{{ area.name }}</a></h2>
+
+        <h2><img src="/static/zohachat-icon.svg" alt="Icon" class="small-icon"><a href="/threads/{{ area.id }}">{{ area.name }}</a></h2>
+        
         <ul>
           {% for thread in threads_for_areas[area.id] %}
             <li><a href="/view_thread/{{ thread.id}}">{{ thread.title }}</a></li>
           {% endfor %}
         </ul>
-      </li>
+
     {% endfor %}
   </ul>
 </body>
