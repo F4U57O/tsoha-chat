@@ -146,7 +146,8 @@ def save_thread(area_id):
 @app.route("/view_thread/<int:thread_id>")
 def view_thread(thread_id):
     sql = text("SELECT * FROM threads WHERE id = :thread_id")
-    sql2 = text("""SELECT M.id, M.content, M.user_id, U.username, M.sent_at FROM messages M INNER JOIN users U ON M.user_id = U.id WHERE M.thread_id = :thread_id ORDER BY sent_at""")
+    sql2 = text("""SELECT M.id, M.content, M.user_id, U.username, M.sent_at FROM messages M
+    INNER JOIN users U ON M.user_id = U.id WHERE M.thread_id = :thread_id ORDER BY sent_at""")
     result = db.session.execute(sql, {"thread_id": thread_id})
     result2 = db.session.execute(sql2, {"thread_id": thread_id})
     thread = result.fetchone()
@@ -215,3 +216,19 @@ def delete_area(area_id):
         db.session.execute(sql, {"area_id": area_id})
         db.session.commit()
         return redirect("/")
+
+@app.route("/feedback", methods=["POST", "GET"])
+def feedback():
+    if request.method == "POST" and "user_id" in session:
+        feedback_text = request.form["feedback_text"]
+        sender_id = session["user_id"]
+        sql = text("INSERT INTO feedback (sender_id, feedback_text) VALUES (:sender_id, :feedback_text)")
+        db.session.execute(sql, {"sender_id": sender_id, "feedback_text": feedback_text})
+        db.session.commit()
+        return redirect("/")
+    elif request.method == "GET" and "user_role" in session and session["user_role"] == "admin":
+        sql = text("SELECT * FROM feedback")
+        result = db.session.execute(sql)
+        feedback_list = result.fetchall()
+        return render_template("feedback.html", feedback_list=feedback_list)
+    return render_template("feedback.html")
