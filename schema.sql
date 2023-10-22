@@ -26,4 +26,8 @@ CREATE TABLE messages (
     thread_id INTEGER REFERENCES threads(id),
     sent_at TIMESTAMP
 );
-
+CREATE TABLE feedback (
+    id SERIAL PRIMARY KEY,
+    sender_id INTEGER REFERENCES users(id),
+    feedback_text TEXT
+);
