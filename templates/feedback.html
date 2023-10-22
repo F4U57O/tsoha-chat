@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+{% extends "layout.html" %}
+
+{% block title %} Palaute {% endblock %}
+{% block content %}
+{% if session.user_id %}
+<h2>Palaute</h2>
+
+<form action="/feedback" method="post">
+  <div class="form-group">
+    <label for="feedback_text">Anna palautteesi:</label>
+    <textarea class="form-control" id="feedback_text" name="feedback_text"
+    rows="5" required maxlength="50"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Lähetä</button>
+  </form>
+  {% else %}
+    <p>Sinun on kirjauduttava sisään lähettääksesi palautetta.</p>
+  {% endif %}
+  {% if session["user_role"] == "admin" %}
+    <h2>Palauteviestit:</h2>
+    <ul>
+      {% for feedback in feedback_list %}
+        <li><img src="/static/zohachat-icon.svg" alt="Icon" class="small-icon"> {{ feedback.feedback_text }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  {% endblock %}
