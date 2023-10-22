@@ -29,8 +29,8 @@ Ohjeet sovelluksen käynnistykseen:
 
   Kloonaa tämä repositorio omalle koneellesi ja siirry sen juurikansioon. Luo kansioon .env-tiedosto ja määritä sen sisältö seuraavanlaiseksi:
 
-    DATABASE_URL=postgresql+psycopg2://
-    SECRET_KEY=c9263473aa2aafd877e412cc0bab808c
+    DATABASE_URL=<tietokannan-paikallinen-osoite>
+    SECRET_KEY=<salainen-avain>
 
   Seuraavaksi aktivoi virtuaaliympäristö ja asenna sovelluksen riippuvuudet komennoilla:
 
