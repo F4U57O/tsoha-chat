@@ -15,8 +15,9 @@
         <li><a href="/view_thread/{{ thread.id }}">{{ thread.title }}</a></li>
       {% endfor %}
     </ul>
-
+    {% if session.user_id %}
     <a href="/create_thread/{{ area_id }}">Luo uusi keskusteluketju</a>
+    {% endif %}
     <p>
     <a href="/areas">Takaisin keskustelualueille</a>
 </body>
